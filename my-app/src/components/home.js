@@ -8,9 +8,7 @@ const Home = () => {
 
                 {data.map((item, index) => (
 
-                    <div class="col mb-4" >
-
-
+                    <div class="col mb-4" id={{index }}>
                         <div class="card">
                             <img src={item.img}></img>
                             <div class="card-body">

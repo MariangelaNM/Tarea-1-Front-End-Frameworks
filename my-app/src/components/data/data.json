@@ -9,14 +9,12 @@
     },
 
     {
-        "id":1,
+        "id":2,
         "likes":48,
         "img":"https://helpfulprofessor.com/wp-content/uploads/2022/10/French-woman-e1667050422125-1024x683.jpg",
         "user":"lala",
         "description":"Hi Wold, I'm lala",
         "comments":18
     }
-
-
 
 ]
