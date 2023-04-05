@@ -42,14 +42,44 @@ section {
 .nav-link{
   color: #000 !important;
 }
+
 .container{
   width: 100% !important;
 }
+.account-letter{
+  justify-content: left;
+    margin-left: 15px;
+    display: flex;
+    color: black;
+    font-weight: bold;
+}
+.contenedor-horizontal{
+  width:100%;
+  height:40px;
+  display:flex;
+  justify-content: space-between;
+}
+.contenido-horizontal{
+  height:80px;
+  width:30%;
+  float:left;
+}
+
+.texto-time{
+  color: gray;
+}
+.comments-letter{
+  justify-content: left;
+    margin-left: 15px;
+    display: flex;
+    color: gray;
+}
+
 @media (min-width: 1400px){
-.container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
-  max-width: 100% !important;
-}}
-@media (min-width: 992px){
-.navbar-expand-lg .navbar-toggler {
-    display: block !important;
-}}
+  .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+    max-width: 100% !important;
+  }}
+  @media (min-width: 992px){
+  .navbar-expand-lg .navbar-toggler {
+      display: block !important;
+  }}
