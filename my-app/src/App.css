@@ -30,24 +30,26 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 section {
   color: #392d2d;
-  text-shadow: 3px 3px rgba(50,50,70,0.5);
   background-color: #fdfdfdb0;
   height: 100vh;  
 }
 .navBg {
-  background-color: #c9c9c9;
+  background-color: #f5f5f5;
 }
 .nav-link{
   color: #000 !important;
 }
+.container{
+  width: 100% !important;
+}
+@media (min-width: 1400px){
+.container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+  max-width: 100% !important;
+}}
+@media (min-width: 992px){
+.navbar-expand-lg .navbar-toggler {
+    display: block !important;
+}}
