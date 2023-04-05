@@ -1,5 +1,9 @@
-.App {
-  text-align: center;
+input {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 8px;
+  border-radius: 6px;
+  border: 0.5px solid #000000;
+  padding: 0 2px 0 2px;
 }
 
 .App-logo {
@@ -12,7 +16,9 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+.navbar-brand{
+  color: #000 !important;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -21,18 +27,90 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+
+section {
+  color: #392d2d;
+  background-color: #fdfdfdb0;
+  height: 100vh;  
+}
+.navBg {
+  background-color: #f5f5f5;
+}
+.nav-link{
+  color: #000 !important;
+}
+
+.container{
+  width: 100% !important;
+}
+.account-letter{
+  justify-content: left;
+    display: flex;
+    color: black;
+    font-weight: bold;
+}
+.contenedor-horizontal{
+  width:100%;
+  height:40px;
+  display:flex;
+  justify-content: space-between;
+}
+.contenido-horizontal{
+  height:80px;
+}
+
+.texto-time{
+  color: gray;
+}
+.comments-letter{
+  justify-content: left;
+    display: flex;
+    color: gray;
+}
+
+
+.row{
+  margin-right: 0px !important;
+}
+
+@media (min-width: 1400px){
+  .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+    max-width: 100% !important;
+  }}
+  @media (min-width: 992px){
+  .navbar-expand-lg .navbar-toggler {
+      display: block !important;
+  }}
+
+  @media (min-width: 1004px){
+    .searchInput{
+      margin: 10px;
+      width: 98.5% !important;
+    }
   }
-  to {
-    transform: rotate(360deg);
+
+  @media (min-width: 1004px){
+    .searchInput{
+      margin: 10px;
+      width: 98.5% !important;
+    }
+  }
+  @media (min-width: 451px  ) and (max-width: 1003px  ) {
+    .searchInput{
+      margin: 10px;
+      width: 98.5% !important;
+    }
+  }
+  @media (max-width: 450px){
+  .searchInput{
+    margin: 10px;
+    width: 93%;
   }
 }
