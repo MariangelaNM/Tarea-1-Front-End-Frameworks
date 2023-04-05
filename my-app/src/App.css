@@ -1,6 +1,4 @@
-.App {
-  text-align: center;
-}
+
 
 .App-logo {
   height: 40vmin;
@@ -48,7 +46,6 @@ section {
 }
 .account-letter{
   justify-content: left;
-    margin-left: 15px;
     display: flex;
     color: black;
     font-weight: bold;
@@ -61,8 +58,6 @@ section {
 }
 .contenido-horizontal{
   height:80px;
-  width:30%;
-  float:left;
 }
 
 .texto-time{
@@ -70,7 +65,6 @@ section {
 }
 .comments-letter{
   justify-content: left;
-    margin-left: 15px;
     display: flex;
     color: gray;
 }
