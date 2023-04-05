@@ -1,4 +1,10 @@
-
+input {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 8px;
+  border-radius: 6px;
+  border: 0.5px solid #000000;
+  padding: 0 2px 0 2px;
+}
 
 .App-logo {
   height: 40vmin;
@@ -69,10 +75,7 @@ section {
     color: gray;
 }
 
-.searchInput{
-  margin: 10px;
-  width: 98.5%;
-}
+
 .row{
   margin-right: 0px !important;
 }
@@ -85,3 +88,29 @@ section {
   .navbar-expand-lg .navbar-toggler {
       display: block !important;
   }}
+
+  @media (min-width: 1004px){
+    .searchInput{
+      margin: 10px;
+      width: 98.5% !important;
+    }
+  }
+
+  @media (min-width: 1004px){
+    .searchInput{
+      margin: 10px;
+      width: 98.5% !important;
+    }
+  }
+  @media (min-width: 451px  ) and (max-width: 1003px  ) {
+    .searchInput{
+      margin: 10px;
+      width: 98.5% !important;
+    }
+  }
+  @media (max-width: 450px){
+  .searchInput{
+    margin: 10px;
+    width: 93%;
+  }
+}
