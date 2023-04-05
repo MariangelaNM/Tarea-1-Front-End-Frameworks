@@ -1,7 +1,7 @@
 const Home = () => {
     return (
-        <div>
-            <div class="row row-cols-1 row-cols-md-3" style={{ padding: "10px" }}>
+   
+            <div class="row row-cols-1 row-cols-md-3" style={{margin:'0px',marginTop:'10px'}} >
                 <div class="col mb-4">
                     <div class="card">
                         <img src="https://liveboldandbloom.com/wp-content/uploads/2021/09/Untitled_design_3_1-768x538.png"></img>
@@ -69,7 +69,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-        </div>
+      
     )
 }
 export default Home
