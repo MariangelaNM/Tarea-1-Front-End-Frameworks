@@ -4,12 +4,14 @@ const Home = () => {
 
     const [cardData, setcardData] = useState(data);
     const [cardSee, setCardSee] = useState(false);
+
+    const [messageSee, setCardmessageSee] = useState(false);
     const [inputSearch, setInputSearch] = useState('');
     let identificadorTiempoDeEspera;
 
     useEffect(() => {
         temporizadorDeRetraso()
-    });
+    }, []);
 
     function temporizadorDeRetraso() {
         identificadorTiempoDeEspera = setTimeout(funcionConRetraso, 3000);
@@ -19,11 +21,40 @@ const Home = () => {
         setCardSee(true);
     }
 
-    const [message, setMessage] = useState('');
-
     const handleChange = (event) => {
         setInputSearch(event.target.value);
+        let newSearchCard = [];
+        setCardmessageSee(false)
+        if ((search(cardData, event.target.value)) != undefined) {
+            setCardmessageSee(false)
+            temporizadorDeRetraso()
+            newSearchCard.push(search(cardData, event.target.value));
+            setcardData(newSearchCard);
+        }
+        else if (event.target.value === '') {
+            setCardmessageSee(false)
+            setcardData(data);
+        }
+        else if (event.target.value != '' && (search(cardData, event.target.value)) === undefined) {
+            setCardmessageSee(true)
+            console.log("asdas")
+        }
     };
+
+    function search(obj, key) {
+        if (typeof obj !== "object" || obj === null) {
+            return obj === key ? obj : undefined;
+        }
+        for (const [k, v] of Object.entries(obj)) {
+            const result = search(v, key);
+            if (result !== undefined) {
+                console.log(v)
+                return v;
+
+            }
+        }
+        return undefined;
+    }
 
     return (
         <div>
@@ -32,6 +63,9 @@ const Home = () => {
                 onChange={handleChange}>
 
             </input>
+            {messageSee === true &&
+                <h8 style={{marginLeft:"20px"}}>No se encuentra a "{inputSearch}"</h8>
+            }
 
             {cardSee === true &&
 
