@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import data from './data/data.json';
 const Home = () => {
 
+    const [cardData, setcardData] = useState(data);
     const [cardSee, setCardSee] = useState(false);
+    const [inputSearch, setInputSearch] = useState('');
     let identificadorTiempoDeEspera;
+
+    useEffect(() => {
+        temporizadorDeRetraso()
+    });
 
     function temporizadorDeRetraso() {
         identificadorTiempoDeEspera = setTimeout(funcionConRetraso, 3000);
@@ -12,17 +18,25 @@ const Home = () => {
     function funcionConRetraso() {
         setCardSee(true);
     }
-    useEffect(() => {
-        temporizadorDeRetraso()
-    });
+
+    const [message, setMessage] = useState('');
+
+    const handleChange = (event) => {
+        setInputSearch(event.target.value);
+    };
 
     return (
         <div>
-            <input type="text" className="custom-file-input searchInput" placeholder="Search" id="inputGroupFile02"></input>
+            <input type="text" className="custom-file-input searchInput" placeholder="Search"
+                id="search" name="message"
+                onChange={handleChange}>
+
+            </input>
+
             {cardSee === true &&
 
                 <div className="row row-cols-1 row-cols-md-3" style={{ margin: '0px', marginTop: '10px' }} >
-                    {data.map((item, index) => (
+                    {cardData.map((item, index) => (
 
                         <div className="col mb-4" id={{ index }}>
                             <div className="card">
@@ -53,9 +67,9 @@ const Home = () => {
 
                 <div class="d-flex justify-content-center">
                     <div class="spinner-border" role="status">
-                   
+
                     </div>
-                    <span class="sr-only" style={{marginLeft:"2px"}}>Loading...</span>
+                    <span class="sr-only" style={{ marginLeft: "2px" }}>Loading...</span>
                 </div>
             }
         </div>
