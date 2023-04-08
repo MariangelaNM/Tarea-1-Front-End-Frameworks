@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import data from './data/data.json';
+import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 const Home = () => {
 
     const [cardData, setcardData] = useState(data);
     const [cardSee, setCardSee] = useState(false);
-
+    const [messageSeeSave, setCardmessageSeeSave] = useState(false);
     const [messageSee, setCardmessageSee] = useState(false);
     const [inputSearch, setInputSearch] = useState('');
     let identificadorTiempoDeEspera;
@@ -12,7 +14,6 @@ const Home = () => {
     useEffect(() => {
         temporizadorDeRetraso()
     }, []);
-
     function temporizadorDeRetraso() {
         identificadorTiempoDeEspera = setTimeout(funcionConRetraso, 3000);
     }
@@ -37,7 +38,6 @@ const Home = () => {
         }
         else if (event.target.value != '' && (search(cardData, event.target.value)) === undefined) {
             setCardmessageSee(true)
-            console.log("asdas")
         }
     };
 
@@ -48,25 +48,45 @@ const Home = () => {
         for (const [k, v] of Object.entries(obj)) {
             const result = search(v, key);
             if (result !== undefined) {
-                console.log(v)
                 return v;
 
             }
         }
         return undefined;
     }
+    function guardar() {
+
+        setCardmessageSeeSave(false)
+    }
+    const addLike = (index) => {
+        var likes = data[index].likes;
+        data[index].likes = likes + 1;
+        setcardData(data);
+        setCardmessageSeeSave(true)
+        setTimeout(guardar, 2000)
+    }
 
     return (
         <div>
             <input type="text" className="custom-file-input searchInput" placeholder="Search"
-                id="search" name="message"
-                onChange={handleChange}>
-
+                id="search" name="message" onChange={handleChange}>
             </input>
-            {messageSee === true &&
-                <h8 style={{marginLeft:"20px"}}>No se encuentra a "{inputSearch}"</h8>
-            }
 
+            {messageSee === true &&
+                <h8 style={{ marginLeft: "15px" }}>No se encuentra a "{inputSearch}"</h8>}
+
+            {messageSeeSave === true &&
+                <Button style={{ float: 'right' }} variant="success" disabled>
+                    <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    Guardando...
+                </Button>
+            }
             {cardSee === true &&
 
                 <div className="row row-cols-1 row-cols-md-3" style={{ margin: '0px', marginTop: '10px' }} >
@@ -78,10 +98,19 @@ const Home = () => {
                                 <div className="card-body">
                                     <div className="contenedor-horizontal">
                                         <p className="contenido-horizontal texto-time">3min ago</p>
-                                        <p className="contenido-horizontal"><button type="button" className="btn btn-danger">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">
-                                                <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
-                                            </svg> {item.likes}k</button></p>
+                                        <p className="contenido-horizontal">
+                                            <button type="button" className="btn btn-danger"
+                                                onClick={() => {
+
+                                                    temporizadorDeRetraso();
+                                                    addLike(index);
+                                                }} >
+
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                                                    <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
+                                                </svg> {item.likes}
+                                            </button>
+                                        </p>
                                     </div>
                                     <p className="account-letter">@{item.user}</p>
                                     <p className="card-text">{item.description}</p>
@@ -106,6 +135,7 @@ const Home = () => {
                     <span class="sr-only" style={{ marginLeft: "2px" }}>Loading...</span>
                 </div>
             }
+
         </div>
     )
 };
