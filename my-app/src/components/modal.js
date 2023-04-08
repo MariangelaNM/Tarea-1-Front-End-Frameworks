@@ -1,44 +1,32 @@
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
-import { CSSTransition } from "react-transition-group";
-import "./modal.css";
-
-const Modal = props => {
-  const closeOnEscapeKeyDown = e => {
-    if ((e.charCode || e.keyCode) === 27) {
-      props.onClose();
-    }
-  };
-
-  useEffect(() => {
-    document.body.addEventListener("keydown", closeOnEscapeKeyDown);
-    return function cleanup() {
-      document.body.removeEventListener("keydown", closeOnEscapeKeyDown);
-    };
-  }, []);
-
-  return ReactDOM.createPortal(
-    <CSSTransition
-      in={props.show}
-      unmountOnExit
-      timeout={{ enter: 0, exit: 300 }}
-    >
-      <div className="modal" onClick={props.onClose}>
-        <div className="modal-content" onClick={e => e.stopPropagation()}>
-          <div className="modal-header">
-            <h4 className="modal-title">{props.title}</h4>
-          </div>
-          <div className="modal-body">{props.children}</div>
-          <div className="modal-footer">
-            <button onClick={props.onClose} className="button">
-              Close
-            </button>
-          </div>
+import React from "react";
+import "./Modal.css";
+import profile from "./data/profile.json"
+function Modal({ setOpenModal }) {
+  return (
+    <div className="modalBackground">
+      <div className="modalContainer">
+        <div className="titleCloseBtn">
+          <button
+            onClick={() => {
+              setOpenModal(false);
+            }}
+          >
+            X
+          </button>
         </div>
+        <img class="circular--square" style={{width:"250px"}} src={profile.img}></img>
+                              
+        <div className="user">
+        <p>@{profile.user}</p>
+         
+        </div>
+        <div className="body">
+          <p>{profile.description}</p>
+        </div>
+    
       </div>
-    </CSSTransition>,
-    document.getElementById("root")
+    </div>
   );
-};
+}
 
 export default Modal;
