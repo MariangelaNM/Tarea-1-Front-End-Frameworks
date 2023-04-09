@@ -1,5 +1,5 @@
 import React from "react";
-import "./Modal.css";
+import "./modal.css";
 import profile from "./data/profile.json"
 function Modal({ setOpenModal }) {
   return (

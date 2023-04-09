@@ -1,7 +1,7 @@
 import { Navbar, Nav, Container } from "react-bootstrap"
 import React, { useState } from "react";
 import { Outlet, Link } from "react-router-dom"
-import Modal from "../components/Modal.js"
+import Modal from "../components/modal";
 import profile from "../components/data/profile.json"
 const NavBarExample = () => {
     const [modalOpen, setModalOpen] = useState(false);
