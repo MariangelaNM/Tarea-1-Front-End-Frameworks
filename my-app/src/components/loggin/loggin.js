@@ -3,37 +3,42 @@ import "./loggin.css"
 const Loggin = ({ chooseMessage }) => {
     const [user, setuser] = useState();
     const [password, setpassword] = useState();
-    const [result, setresult] = useState();
-    const [existToken, setexistToken] = useState(false);
-   function loggin(){
+    const [error, seterror] = useState(false);
 
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+    function loggin() {
 
         var raw = JSON.stringify({
             "username": user,
             "password": password
         });
 
-        var requestOptions = {
+        const requestOptions = {
             method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
+            headers: { 'Content-Type': 'application/json' },
+            body: raw
         };
 
-        fetch("https://three-points.herokuapp.com/api/login", requestOptions)
-            .then(response => response.json())
-            .then(result => setresult(result))
-            .catch(error => console.log('error', error));
-        try {
-            setexistToken(result['token'] !== undefined);
-            if (existToken) {
-                chooseMessage(true)
-            }
-        } catch (error) {
+        fetch('https://three-points.herokuapp.com/api/login', requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                debugger
+                // check for error response
+                if (!response.ok) {
+                    seterror(true);
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
 
-        }
+                chooseMessage(true);
+            })
+            .catch(error => {
+                seterror(true);
+                this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+
 
     }
     const handleUser = (event) => {
@@ -46,7 +51,13 @@ const Loggin = ({ chooseMessage }) => {
 
     return (
         <div className="Auth-form-container">
+
             <div className="Auth-form-content">
+                {error == true &&
+                    <div class="alert alert-danger" role="alert">
+                        Password or user error!
+                    </div>
+                }
                 <h3 className="Auth-form-title">Sign In</h3>
                 <div className="form-group mt-3">
                     <label>Email address</label>
@@ -66,11 +77,12 @@ const Loggin = ({ chooseMessage }) => {
                     />
                 </div>
                 <div className="d-grid gap-2 mt-3">
+
                     <button className="btn btn-primary" onClick={() => { loggin() }}>
                         Submit
                     </button>
-                </div>
 
+                </div>
             </div>
 
         </div>
