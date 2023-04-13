@@ -128,11 +128,11 @@ const Home = () => {
             }
             {cardSee === false &&
 
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
+                <div className="d-flex justify-content-center">
+                    <div className="spinner-border" role="status">
 
                     </div>
-                    <span class="sr-only" style={{ marginLeft: "2px" }}>Loading...</span>
+                    <span className="sr-only" style={{ marginLeft: "2px" }}>Loading...</span>
                 </div>
             }
 

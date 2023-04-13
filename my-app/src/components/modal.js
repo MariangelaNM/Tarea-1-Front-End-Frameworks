@@ -17,7 +17,7 @@ function Modal({ setOpenModal }) {
             X
           </button>
         </div>
-        <img class="circular--square" style={{ width: "250px" }} src={profile.img}></img>
+        <img className="circular--square" style={{ width: "250px" }} src={profile.img}></img>
 
         <div className="user">
           <p>@{profile.user}</p>

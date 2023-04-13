@@ -22,15 +22,13 @@ const Loggin = ({ chooseMessage }) => {
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
-                debugger
                 // check for error response
                 if (!response.ok) {
                     seterror(true);
-                    // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 }
-
+                localStorage.setItem('token', JSON.stringify(data));
                 chooseMessage(true);
             })
             .catch(error => {
@@ -54,7 +52,7 @@ const Loggin = ({ chooseMessage }) => {
 
             <div className="Auth-form-content">
                 {error == true &&
-                    <div class="alert alert-danger" role="alert">
+                    <div className="alert alert-danger" role="alert">
                         Password or user error!
                     </div>
                 }
