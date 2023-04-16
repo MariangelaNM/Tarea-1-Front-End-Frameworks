@@ -11,7 +11,7 @@ const Home = () => {
     const [inputSearch, setInputSearch] = useState('');
     let identificadorTiempoDeEspera;
     const [result, setResult] = React.useState();
-
+    let nowDate = new Date()
     useEffect(() => {
         temporizadorDeRetraso()
     }, []);
@@ -97,6 +97,9 @@ const Home = () => {
         setCardmessageSeeSave(true)
         setTimeout(guardar, 2000)
     }
+    const timeToPublish = (time) => {
+        return ((nowDate-Date.parse(time))/60000).toFixed(0)
+    }
 
     return (
         <div>
@@ -122,14 +125,14 @@ const Home = () => {
             {cardSee === true &&
 
                 <div className="row row-cols-1 row-cols-md-3" style={{ margin: '0px', marginTop: '10px' }} >
-                    {cardData.map((item, index) => (
+                    {result.map((item, index) => (
 
                         <div className="col mb-4" id={{ index }}>
                             <div className="card">
-                                <img src={item.img}></img>
+                                <img src={item.image}></img>
                                 <div className="card-body">
                                     <div className="contenedor-horizontal">
-                                        <p className="contenido-horizontal texto-time">3min ago</p>
+                                        <p className="contenido-horizontal texto-time">{timeToPublish(item.updatedAt)}min ago</p>
                                         <p className="contenido-horizontal">
                                             <button type="button" className="btn btn-danger"
                                                 onClick={() => {
@@ -144,13 +147,13 @@ const Home = () => {
                                             </button>
                                         </p>
                                     </div>
-                                    <p className="account-letter">@{item.user}</p>
-                                    <p className="card-text">{item.description}</p>
+                                    <p className="account-letter">@{item.author.name}</p>
+                                    <p className="card-text">{item.text}</p>
                                     <p className="comments-letter">
                                         <svg style={{ marginRight: "1%" }} xmlns="http://www.w3.org/2000/svg" width="14" height="23" fill="currentColor" className="bi bi-chat-right" viewBox="0 0 16 16">
                                             <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z" />
                                         </svg>
-                                        Comments {item.comments}
+                                        Comments {item.comments.length}
                                     </p>
                                 </div>
                             </div>
