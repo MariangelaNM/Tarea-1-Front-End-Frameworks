@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 const Home = () => {
 
-    const [cardData, setcardData] = useState(data);
+    const [cardData, setcardData] = React.useState();
     const [cardSee, setCardSee] = useState(false);
     const [messageSeeSave, setCardmessageSeeSave] = useState(false);
     const [messageSee, setCardmessageSee] = useState(false);
@@ -36,6 +36,7 @@ const Home = () => {
                     return Promise.reject(error);
                 }
                 setResult(data);
+                setcardData(data);
                 console.log(result)
             })
             .catch(error => {
@@ -56,40 +57,44 @@ const Home = () => {
 
     const handleChange = (event) => {
         setInputSearch(event.target.value);
-        let newSearchCard = [];
         setCardmessageSee(false)
-        if ((search(cardData, event.target.value)) != undefined) {
+        if ((search(event.target.value)) != undefined) {
+
             setCardmessageSee(false)
             temporizadorDeRetraso()
-            newSearchCard.push(search(cardData, event.target.value));
-            setcardData(newSearchCard);
+            setcardData(search(event.target.value));
         }
         else if (event.target.value === '') {
             setCardmessageSee(false)
-            setcardData(data);
+            setcardData(result);
         }
-        else if (event.target.value != '' && (search(cardData, event.target.value)) === undefined) {
+        else if (event.target.value != '' && (search(event.target.value)) === undefined) {
             setCardmessageSee(true)
         }
     };
 
-    function search(obj, key) {
-        if (typeof obj !== "object" || obj === null) {
-            return obj === key ? obj : undefined;
-        }
-        for (const [k, v] of Object.entries(obj)) {
-            const result = search(v, key);
-            if (result !== undefined) {
-                return v;
+    function search(key) {
+        debugger;
+        let data = []
 
+        result.forEach(function (element, index) {
+            if (element['text'].includes(key)) {
+                data.push(element)
             }
-        }
-        return undefined;
+            else if (element['author']['name'].includes(key)) {
+                data.push(element)
+            }
+            else if (element['author']['username'].includes(key)) {
+                data.push(element)
+            }
+        })
+        return data
+
     }
     function guardar() {
-
         setCardmessageSeeSave(false)
     }
+
     const addLike = (index) => {
         var likes = data[index].likes;
         data[index].likes = likes + 1;
@@ -97,8 +102,9 @@ const Home = () => {
         setCardmessageSeeSave(true)
         setTimeout(guardar, 2000)
     }
+    
     const timeToPublish = (time) => {
-        return ((nowDate-Date.parse(time))/60000).toFixed(0)
+        return ((nowDate - Date.parse(time)) / 60000).toFixed(0)
     }
 
     return (
@@ -125,7 +131,7 @@ const Home = () => {
             {cardSee === true &&
 
                 <div className="row row-cols-1 row-cols-md-3" style={{ margin: '0px', marginTop: '10px' }} >
-                    {result.map((item, index) => (
+                    {cardData.map((item, index) => (
 
                         <div className="col mb-4" id={{ index }}>
                             <div className="card">
