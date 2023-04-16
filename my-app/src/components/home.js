@@ -10,10 +10,42 @@ const Home = () => {
     const [messageSee, setCardmessageSee] = useState(false);
     const [inputSearch, setInputSearch] = useState('');
     let identificadorTiempoDeEspera;
+    const [result, setResult] = React.useState();
 
     useEffect(() => {
         temporizadorDeRetraso()
     }, []);
+
+    useEffect(() => {
+        const token = (JSON.parse(localStorage.getItem("token")).token);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + token);
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("https://three-points.herokuapp.com/api/posts", requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // check for error response
+                if (!response.ok) {
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+                setResult(data);
+                console.log(result)
+            })
+            .catch(error => {
+                this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+
+    }, []);
+
+
     function temporizadorDeRetraso() {
         identificadorTiempoDeEspera = setTimeout(funcionConRetraso, 3000);
     }
