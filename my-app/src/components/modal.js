@@ -6,7 +6,6 @@ import Loggin from "./loggin/loggin";
 function Modal({ setOpenModal }) {
   return (
     <div className="modalBackground">
-      <Loggin></Loggin>
       <div className="modalContainer">
         <div className="titleCloseBtn">
           <button
