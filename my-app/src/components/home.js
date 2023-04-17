@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import data from './data/data.json';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 const Home = () => {
@@ -14,9 +13,11 @@ const Home = () => {
     let nowDate = new Date()
     useEffect(() => {
         temporizadorDeRetraso()
+        callData();
     }, []);
 
-    useEffect(() => {
+
+    function callData() {
         const token = (JSON.parse(localStorage.getItem("token")).token);
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + token);
@@ -37,15 +38,12 @@ const Home = () => {
                 }
                 setResult(data);
                 setcardData(data);
-                console.log(result)
             })
             .catch(error => {
                 this.setState({ errorMessage: error.toString() });
                 console.error('There was an error!', error);
             });
-
-    }, []);
-
+    }
 
     function temporizadorDeRetraso() {
         identificadorTiempoDeEspera = setTimeout(funcionConRetraso, 3000);
@@ -74,7 +72,6 @@ const Home = () => {
     };
 
     function search(key) {
-        debugger;
         let data = []
 
         result.forEach(function (element, index) {
@@ -91,18 +88,41 @@ const Home = () => {
         return data
 
     }
+
     function guardar() {
         setCardmessageSeeSave(false)
     }
 
     const addLike = (index) => {
-        var likes = data[index].likes;
-        data[index].likes = likes + 1;
-        setcardData(data);
+
+        const token = (JSON.parse(localStorage.getItem("token")).token);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + token);
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("https://three-points.herokuapp.com/api/posts/" + index + "/like", requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // check for error response
+                if (!response.ok) {
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+            })
+            .catch(error => {
+                this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+        callData();
         setCardmessageSeeSave(true)
         setTimeout(guardar, 2000)
     }
-    
+
     const timeToPublish = (time) => {
         return ((nowDate - Date.parse(time)) / 60000).toFixed(0)
     }
@@ -117,7 +137,7 @@ const Home = () => {
                 <h8 style={{ marginLeft: "15px" }}>No se encuentra a "{inputSearch}"</h8>}
 
             {messageSeeSave === true &&
-                <Button style={{ float: 'right' }} variant="success" disabled>
+                <Button style={{ marginLeft: "15px"}} variant="success" disabled>
                     <Spinner
                         as="span"
                         animation="grow"
@@ -144,7 +164,7 @@ const Home = () => {
                                                 onClick={() => {
 
                                                     temporizadorDeRetraso();
-                                                    addLike(index);
+                                                    addLike(item.id);
                                                 }} >
 
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">
@@ -168,15 +188,12 @@ const Home = () => {
                 </div>
             }
             {cardSee === false &&
-
                 <div className="d-flex justify-content-center">
                     <div className="spinner-border" role="status">
-
                     </div>
                     <span className="sr-only" style={{ marginLeft: "2px" }}>Loading...</span>
                 </div>
             }
-
         </div>
     )
 };
