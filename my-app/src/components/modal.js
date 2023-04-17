@@ -1,6 +1,8 @@
 import React from "react";
-import "./Modal.css";
+import "./modal.css";
 import profile from "./data/profile.json"
+import Loggin from "./loggin/loggin";
+
 function Modal({ setOpenModal }) {
   return (
     <div className="modalBackground">
@@ -14,16 +16,15 @@ function Modal({ setOpenModal }) {
             X
           </button>
         </div>
-        <img class="circular--square" style={{width:"250px"}} src={profile.img}></img>
-                              
+        <img className="circular--square" style={{ width: "250px" }} src={profile.img}></img>
+
         <div className="user">
-        <p>@{profile.user}</p>
-         
+          <p>@{profile.user}</p>
+
         </div>
         <div className="body">
           <p>{profile.description}</p>
         </div>
-    
       </div>
     </div>
   );

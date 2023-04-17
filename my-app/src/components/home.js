@@ -1,19 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import data from './data/data.json';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 const Home = () => {
 
-    const [cardData, setcardData] = useState(data);
+    const [cardData, setcardData] = React.useState();
     const [cardSee, setCardSee] = useState(false);
     const [messageSeeSave, setCardmessageSeeSave] = useState(false);
     const [messageSee, setCardmessageSee] = useState(false);
     const [inputSearch, setInputSearch] = useState('');
     let identificadorTiempoDeEspera;
-
+    const [result, setResult] = React.useState();
+    let nowDate = new Date()
     useEffect(() => {
         temporizadorDeRetraso()
+        callData();
     }, []);
+
+
+    function callData() {
+        const token = (JSON.parse(localStorage.getItem("token")).token);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + token);
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("https://three-points.herokuapp.com/api/posts", requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // check for error response
+                if (!response.ok) {
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+                setResult(data);
+                setcardData(data);
+            })
+            .catch(error => {
+                this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+    }
+
     function temporizadorDeRetraso() {
         identificadorTiempoDeEspera = setTimeout(funcionConRetraso, 3000);
     }
@@ -24,46 +55,76 @@ const Home = () => {
 
     const handleChange = (event) => {
         setInputSearch(event.target.value);
-        let newSearchCard = [];
         setCardmessageSee(false)
-        if ((search(cardData, event.target.value)) != undefined) {
+        if ((search(event.target.value)) != undefined) {
+
             setCardmessageSee(false)
             temporizadorDeRetraso()
-            newSearchCard.push(search(cardData, event.target.value));
-            setcardData(newSearchCard);
+            setcardData(search(event.target.value));
         }
         else if (event.target.value === '') {
             setCardmessageSee(false)
-            setcardData(data);
+            setcardData(result);
         }
-        else if (event.target.value != '' && (search(cardData, event.target.value)) === undefined) {
+        else if (event.target.value != '' && (search(event.target.value)) === undefined) {
             setCardmessageSee(true)
         }
     };
 
-    function search(obj, key) {
-        if (typeof obj !== "object" || obj === null) {
-            return obj === key ? obj : undefined;
-        }
-        for (const [k, v] of Object.entries(obj)) {
-            const result = search(v, key);
-            if (result !== undefined) {
-                return v;
+    function search(key) {
+        let data = []
 
+        result.forEach(function (element, index) {
+            if (element['text'].includes(key)) {
+                data.push(element)
             }
-        }
-        return undefined;
-    }
-    function guardar() {
+            else if (element['author']['name'].includes(key)) {
+                data.push(element)
+            }
+            else if (element['author']['username'].includes(key)) {
+                data.push(element)
+            }
+        })
+        return data
 
+    }
+
+    function guardar() {
         setCardmessageSeeSave(false)
     }
+
     const addLike = (index) => {
-        var likes = data[index].likes;
-        data[index].likes = likes + 1;
-        setcardData(data);
+
+        const token = (JSON.parse(localStorage.getItem("token")).token);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + token);
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("https://three-points.herokuapp.com/api/posts/" + index + "/like", requestOptions)
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+                // check for error response
+                if (!response.ok) {
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+            })
+            .catch(error => {
+                this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+        callData();
         setCardmessageSeeSave(true)
         setTimeout(guardar, 2000)
+    }
+
+    const timeToPublish = (time) => {
+        return ((nowDate - Date.parse(time)) / 60000).toFixed(0)
     }
 
     return (
@@ -76,7 +137,7 @@ const Home = () => {
                 <h8 style={{ marginLeft: "15px" }}>No se encuentra a "{inputSearch}"</h8>}
 
             {messageSeeSave === true &&
-                <Button style={{ float: 'right' }} variant="success" disabled>
+                <Button style={{ marginLeft: "15px"}} variant="success" disabled>
                     <Spinner
                         as="span"
                         animation="grow"
@@ -94,16 +155,16 @@ const Home = () => {
 
                         <div className="col mb-4" id={{ index }}>
                             <div className="card">
-                                <img src={item.img}></img>
+                                <img src={item.image}></img>
                                 <div className="card-body">
                                     <div className="contenedor-horizontal">
-                                        <p className="contenido-horizontal texto-time">3min ago</p>
+                                        <p className="contenido-horizontal texto-time">{timeToPublish(item.updatedAt)}min ago</p>
                                         <p className="contenido-horizontal">
                                             <button type="button" className="btn btn-danger"
                                                 onClick={() => {
 
                                                     temporizadorDeRetraso();
-                                                    addLike(index);
+                                                    addLike(item.id);
                                                 }} >
 
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">
@@ -112,13 +173,13 @@ const Home = () => {
                                             </button>
                                         </p>
                                     </div>
-                                    <p className="account-letter">@{item.user}</p>
-                                    <p className="card-text">{item.description}</p>
+                                    <p className="account-letter">@{item.author.name}</p>
+                                    <p className="card-text">{item.text}</p>
                                     <p className="comments-letter">
                                         <svg style={{ marginRight: "1%" }} xmlns="http://www.w3.org/2000/svg" width="14" height="23" fill="currentColor" className="bi bi-chat-right" viewBox="0 0 16 16">
                                             <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z" />
                                         </svg>
-                                        Comments {item.comments}
+                                        Comments {item.comments.length}
                                     </p>
                                 </div>
                             </div>
@@ -127,15 +188,12 @@ const Home = () => {
                 </div>
             }
             {cardSee === false &&
-
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-
+                <div className="d-flex justify-content-center">
+                    <div className="spinner-border" role="status">
                     </div>
-                    <span class="sr-only" style={{ marginLeft: "2px" }}>Loading...</span>
+                    <span className="sr-only" style={{ marginLeft: "2px" }}>Loading...</span>
                 </div>
             }
-
         </div>
     )
 };
