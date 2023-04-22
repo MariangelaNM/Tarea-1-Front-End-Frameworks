@@ -15,17 +15,14 @@ function App() {
   return (
     <div className="App">
        
-
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />}>
-
               <Route path='*' element={<Home />} />
             </Route>
             <Route path='/loggin' element={  <Loggin chooseMessage={chooseMessage}></Loggin>}></Route>
           </Routes>
-        </BrowserRouter>
-      
+        </BrowserRouter>   
 
     </div>
   );

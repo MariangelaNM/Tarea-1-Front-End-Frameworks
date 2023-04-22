@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useNavigate } from "react-router-dom";
 import NavBarExample from "../layouts/navbar";
+
 const Home = () => {
   const navigate = useNavigate();
   const [cardData, setcardData] = React.useState();
