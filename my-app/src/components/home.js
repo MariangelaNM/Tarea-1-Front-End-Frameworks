@@ -43,13 +43,14 @@ const Home = () => {
           .get("content-type")
           ?.includes("application/json");
         const data = isJson && (await response.json());
-        // check for error response
         if (!response.ok) {
           const error = (data && data.message) || response.status;
+          setCardSee(false);
           return Promise.reject(error);
+        } else {
+          setResult(data);
+          setcardData(data);
         }
-        setResult(data);
-        setcardData(data);
       })
       .catch((error) => {
         this.setState({ errorMessage: error.toString() });

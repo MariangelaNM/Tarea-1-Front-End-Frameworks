@@ -68,14 +68,14 @@ function Modal({ setOpenModal }) {
           <div className="body">
             <p>{result.bio}</p>
           </div>
-          <button type="button" class="btn btn-danger" onClick={()=>(Logout ())}>
+          <button type="button" className="btn btn-danger" onClick={()=>(Logout ())}>
             Logout
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-chevron-bar-left"
+              className="bi bi-chevron-bar-left"
               viewBox="0 0 16 16" 
             >
               <path
