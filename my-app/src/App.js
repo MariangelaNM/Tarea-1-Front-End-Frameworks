@@ -14,19 +14,18 @@ function App() {
 
   return (
     <div className="App">
-      {autentication == false &&
-        <Loggin chooseMessage={chooseMessage}></Loggin>
-      }
-      {autentication == true &&
+       
+
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<NavBarExample />}>
-              <Route index element={<Home />} />
-              <Route path='*' element={<Navigate replace to="/" />} />
+            <Route path='/' element={<Home />}>
+
+              <Route path='*' element={<Home />} />
             </Route>
+            <Route path='/loggin' element={  <Loggin chooseMessage={chooseMessage}></Loggin>}></Route>
           </Routes>
         </BrowserRouter>
-      }
+      
 
     </div>
   );
