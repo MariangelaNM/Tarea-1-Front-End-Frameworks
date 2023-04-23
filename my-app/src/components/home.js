@@ -46,6 +46,8 @@ const Home = () => {
         if (!response.ok) {
           const error = (data && data.message) || response.status;
           setCardSee(false);
+          localStorage.clear();
+          navigate(`/loggin`);
           return Promise.reject(error);
         } else {
           setResult(data);
@@ -54,6 +56,8 @@ const Home = () => {
       })
       .catch((error) => {
         this.setState({ errorMessage: error.toString() });
+        localStorage.clear();
+        navigate(`/loggin`);
         console.error("There was an error!", error);
       });
   }
@@ -114,8 +118,7 @@ const Home = () => {
     };
 
     fetch(
-      "https://three-points.herokuapp.com/api/posts/" + index + "/like",
-      requestOptions
+      "https://three-points.herokuapp.com/api/posts/" + index + "/like", requestOptions
     )
       .then(async (response) => {
         const isJson = response.headers
@@ -125,11 +128,14 @@ const Home = () => {
         // check for error response
         if (!response.ok) {
           const error = (data && data.message) || response.status;
+          localStorage.clear();
+          navigate(`/loggin`);
           return Promise.reject(error);
         }
       })
       .catch((error) => {
         this.setState({ errorMessage: error.toString() });
+        navigate(`/loggin`);
         console.error("There was an error!", error);
       });
     callData();
@@ -155,7 +161,7 @@ const Home = () => {
 
       {messageSee === true && (
         <h8 style={{ marginLeft: "15px" }}>
-          No se encuentra a "{inputSearch}"
+          I can't find "{inputSearch}"
         </h8>
       )}
 
@@ -168,10 +174,10 @@ const Home = () => {
             role="status"
             aria-hidden="true"
           />
-          Guardando...
+          Save...
         </Button>
       )}
-      {cardSee === true && (
+      {cardSee === true && cardData != undefined && (
         <div
           className="row row-cols-1 row-cols-md-3"
           style={{ margin: "0px", marginTop: "10px" }}
@@ -230,6 +236,7 @@ const Home = () => {
           ))}
         </div>
       )}
+
       {cardSee === false && (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status"></div>
